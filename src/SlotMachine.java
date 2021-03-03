@@ -19,7 +19,6 @@ public class SlotMachine {
     public static void main(String[] args) {
         welcome();
         menu();
-        endmsg();
     }
 
     /**
@@ -47,7 +46,7 @@ public class SlotMachine {
         //slot machine loop
         while (flag) {
             //tells user balances
-            System.out.printf("Your balance is now $%.2f and there is $%.2f in the machine)\n", playerBalance, machineBalance);
+            printStats();
 
             //prompts user for menu option
             System.out.print("""
@@ -66,7 +65,7 @@ public class SlotMachine {
                 case 1 -> addMoney();
                 case 2 -> changeBetAmount();
                 case 3 -> play();
-                case 4 -> flag = false;
+                case 4 -> flag = cashOut();
                 default -> System.out.print("\nInvalid Choice, ");
             }
         }
@@ -87,6 +86,7 @@ public class SlotMachine {
             if (balance > playerBalance || balance < 0) {
                 System.out.println("Invalid amount, please change how much you are depositing. " +
                         "(This cannot be over how much money you have or negative)");
+                printStats();
             } else {
                 machineBalance += balance;
                 playerBalance -= balance;
@@ -113,6 +113,8 @@ public class SlotMachine {
             if (amount > playerBalance) {
                 System.out.println("Invalid bet, please change how much you are betting. " +
                         "(This cannot be over how much money you have)");
+                printStats();
+
             }
 
             //makes sure bet is not below $1.00
@@ -140,12 +142,20 @@ public class SlotMachine {
     /**
      * Displays ending message and Cash Out
      */
-    public static void endmsg(){
+    public static boolean cashOut(){
         System.out.println("Thanks for playing the Slot Machine!!");
         if(winnings > 0){
             System.out.printf("Congratulations, you have won $%.2f, a total of $%.2f will be returned to you!\n", winnings,machineBalance);
         } else{
             System.out.printf("Sorry, you have lost $%.2f, a total of $%.2f will be returned to you!\n", winnings,machineBalance);
         }
+        return false;
+    }
+
+    /**
+     * Tells user their current balances
+     */
+    public static void printStats(){
+        System.out.printf("Your balance is now $%.2f and there is $%.2f in the machine)\n", playerBalance, machineBalance);
     }
 }
