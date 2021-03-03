@@ -7,14 +7,12 @@ import java.util.Scanner;
  * Description: A program that Emulates a Slot Machine.
  */
 public class SlotMachine {
-    //public variables
+    //Global Variables
     public static Scanner scan = new Scanner(System.in);
-    public static double playerBalance = 100;
-    public static double machineBalance = 0;
-    public static final String[] WORDS = {"Computer", "Science", "Java", "Hello", "World", "Professor", "Helsing"};
-    public static String[][] reels = new String[3][3];
-    public static double betAmount = 1;
-    public static double winnings = 0;
+    public static double playerBalance = 100.00;
+    public static double machineBalance = 0.00;
+    public static double betAmount = 1.00;
+    public static double winnings = 0.00;
 
     public static void main(String[] args) {
         welcome();
@@ -136,6 +134,9 @@ public class SlotMachine {
      * Allows user to play the game
      */
     public static void play() {
+        //initializes variables
+        final String[] WORDS = {"Computer", "Science", "Java", "Hello", "World", "Professor", "Helsing"};
+        String[][] reels = new String[3][3];
 
     }
 
