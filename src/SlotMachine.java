@@ -263,9 +263,9 @@ public class SlotMachine {
             winnings += (betAmount * 2);
             declareWinnings("bottom left to top right", "diagonal", betAmount);
         }
-        machineBalance+=winnings;
+        machineBalance += winnings;
         System.out.println("Your total winnings are $" + (winnings - betAmount));
-       sleep();
+        sleep();
         return new double[]{playerBalance, machineBalance, betAmount, winnings, totalOfBets};
     }
 
@@ -280,7 +280,7 @@ public class SlotMachine {
     public static boolean cashOut(double winnings, double totalOfBets, double machineBalance) {
         System.out.println("Thanks for playing the Slot Machine!!");
         if (winnings - totalOfBets > 0) {
-            System.out.printf("Congratulations, you have won $%.2f, a total of $%.2f will be returned to you!\n", (winnings - totalOfBets),machineBalance);
+            System.out.printf("Congratulations, you have won $%.2f, a total of $%.2f will be returned to you!\n", (winnings - totalOfBets), machineBalance);
         } else {
             double returnValue;
             if ((machineBalance + winnings) > 0) {
