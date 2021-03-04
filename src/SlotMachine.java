@@ -9,7 +9,6 @@ import java.util.Scanner;
  * Description: A program that Emulates a Slot Machine.
  */
 public class SlotMachine {
-    //Global Variables
 
     public static void main(String[] args) {
         welcome();
