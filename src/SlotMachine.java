@@ -1,5 +1,4 @@
 //import used libraries
-
 import java.util.Random;
 import java.util.Scanner;
 
