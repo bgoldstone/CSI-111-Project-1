@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.Random;
 import java.util.Scanner;
 
 /**
@@ -47,6 +48,7 @@ public class SlotMachine {
         double machineBalance = 0.00;
         double betAmount = 1.00;
         double winnings = 0.00;
+        double startingBets = 0.00;
 
         //tells user balances
         printStats(playerBalance, machineBalance);
@@ -72,13 +74,14 @@ public class SlotMachine {
             }
             case 2 -> betAmount = changeBetAmount(scan, playerBalance, machineBalance, betAmount);
             case 3 -> {
-                double[] returnValues = play(scan, playerBalance, machineBalance, betAmount, winnings);
+                double[] returnValues = play(playerBalance, machineBalance, betAmount, startingBets);
                 playerBalance = returnValues[0];
                 machineBalance = returnValues[1];
                 betAmount = returnValues[2];
-                winnings = returnValues[3];
+                winnings += returnValues[3];
+                startingBets += returnValues[4];
             }
-            case 4 -> keepGoing = cashOut(winnings, machineBalance);
+            case 4 -> keepGoing = cashOut(winnings, startingBets, machineBalance);
             default -> System.out.print("\nInvalid Choice, ");
         }
         return keepGoing;
@@ -161,21 +164,133 @@ public class SlotMachine {
     /**
      * Allows user to play the game
      *
-     * @param scan           Takes a scanner for user input
      * @param playerBalance  takes the player's current balance
      * @param machineBalance takes the machine's current balance
      * @param betAmount      takes the bet amount for the user
-     * @param winnings       takes the amount of winnings for the player
-     * @return double[] array consisting of {playerBalance, machineBalance, betAmount, winnings}
+     * @return double[] array consisting of {playerBalance, machineBalance, betAmount, winnings, startingBets}
      */
-    public static double[] play(Scanner scan, double playerBalance, double machineBalance, double betAmount, double winnings) {
+    public static double[] play(double playerBalance, double machineBalance, double betAmount, double startingBets) {
+        //keeps track of winnings for this round
+        double winnings = 0;
+        if (machineBalance - betAmount < 0) {
+            System.out.println("Not enough money in the Machine! Try adding more money to the machine");
+            return new double[]{playerBalance, machineBalance, betAmount, winnings};
+        } else {
+            System.out.println("The Game is about to start!");
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        machineBalance -= betAmount;
         //initializes variables
-        final String[] WORDS = {"Computer", "Science", "Java", "Hello", "World", "Professor", "Helsing"};
+        String[] WORDS = {"Computer", "Science", "Java", "Hello", "World", "Professor", "Helsing"};
+        //initializes random object
+        Random rand = new Random();
         String[][] reels = new String[3][3];
-        double[] returnValues = {playerBalance, machineBalance, betAmount, winnings};
+        //Assigns reels
+        for (int i = 0; i < reels.length; i++) {
+            for (int j = 0; j < reels[i].length; j++) {
+                reels[i][j] = WORDS[rand.nextInt(WORDS.length)];
+            }
+        }
+        System.out.println("\n");
+        for (int i = 0; i < reels.length; i++) {
+            System.out.println(Arrays.toString(reels[i]));
+        }
+        System.out.println();
 
+        //checks Winning conditions
 
-        return Arrays.copyOf(returnValues, returnValues.length);
+        //if three or two across
+        if (reels[0][0] == reels[0][1] && reels[0][1] == reels[0][2]) {
+            winnings += (betAmount * 3);
+            startingBets += betAmount;
+            declareWinnings("top row","across",betAmount*2);
+        } else if (reels[0][0] == reels[0][1] || reels[0][1] == reels[0][2]) {
+            winnings += (betAmount * 2);
+            startingBets += betAmount;
+            declareWinnings("top row","across",betAmount);
+        }
+
+        if (reels[1][0] == reels[1][1] && reels[1][1] == reels[1][2]) {
+            winnings += (betAmount * 3);
+            startingBets += betAmount;
+            declareWinnings("middle row","across",betAmount*2);
+        } else if (reels[1][0] == reels[1][1] || reels[1][1] == reels[1][2]) {
+            winnings += (betAmount * 2);
+            startingBets += betAmount;
+            declareWinnings("middle row","across",betAmount);
+        }
+
+        if (reels[2][0] == reels[2][1] && reels[2][1] == reels[2][2]) {
+            winnings += (betAmount * 3);
+            startingBets += betAmount;
+            declareWinnings("bottom row","across",betAmount*2);
+        } else if (reels[2][0] == reels[2][1] || reels[2][1] == reels[2][2]) {
+            winnings += (betAmount * 2);
+            startingBets += betAmount;
+            declareWinnings("bottom row","across",betAmount);
+        }
+
+        //if three or two down
+        if (reels[0][0] == reels[1][0] && reels[1][0] == reels[2][0]) {
+            winnings += (betAmount * 3);
+            startingBets += betAmount;
+            declareWinnings("left column","down",betAmount*2);
+        } else if (reels[0][0] == reels[1][0] || reels[1][0] == reels[2][0]) {
+            winnings += (betAmount * 2);
+            startingBets += betAmount;
+            declareWinnings("left column","down",betAmount);
+        }
+
+        if (reels[0][1] == reels[1][1] && reels[1][1] == reels[2][1]) {
+            winnings += (betAmount * 3);
+            startingBets += betAmount;
+            declareWinnings("middle column","down",betAmount*2);
+        } else if (reels[0][1] == reels[1][1] || reels[1][1] == reels[2][1]) {
+            winnings += (betAmount * 2);
+            startingBets += betAmount;
+            declareWinnings("middle column","down",betAmount);
+        }
+
+        if (reels[0][2] == reels[1][2] && reels[1][2] == reels[2][2]) {
+            winnings += (betAmount * 3);
+            startingBets += betAmount;
+            declareWinnings("right column","down",betAmount*2);
+        } else if (reels[0][2] == reels[1][2] || reels[1][2] == reels[2][2]) {
+            winnings += (betAmount * 2);
+            startingBets += betAmount;
+            declareWinnings("right column","down",betAmount);
+        }
+
+        //if two or three diagonal
+        if(reels[0][0] == reels[1][1] && reels[1][1] == reels[2][2]){
+            winnings += (betAmount * 3);
+            startingBets += betAmount;
+            declareWinnings("top left to bottom right","diagonal",betAmount*2);
+        }else if(reels[0][0] == reels[1][1] || reels[1][1] == reels[2][2]){
+            winnings += (betAmount * 2);
+            declareWinnings("top left to bottom right","diagonal",betAmount);
+            startingBets += betAmount;
+        }
+
+        if(reels[0][2] == reels[1][1] && reels[1][1] == reels[2][0]){
+            winnings += (betAmount * 3);
+            startingBets += betAmount;
+            declareWinnings("bottom left to top right","diagonal",betAmount*2);
+        }else if(reels[0][2] == reels[1][1] || reels[1][1] == reels[2][0]){
+            winnings += (betAmount * 2);
+            startingBets += betAmount;
+            declareWinnings("bottom left to top right","diagonal",betAmount);
+        }
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return new double[]{playerBalance, machineBalance, betAmount, winnings, startingBets};
     }
 
     /**
@@ -185,12 +300,19 @@ public class SlotMachine {
      * @param machineBalance takes the machine's current balance
      * @return boolean value to tell the main slot machine to stop going
      */
-    public static boolean cashOut(double winnings, double machineBalance) {
+    public static boolean cashOut(double winnings, double startingBets, double machineBalance) {
         System.out.println("Thanks for playing the Slot Machine!!");
-        if (winnings > 0) {
-            System.out.printf("Congratulations, you have won $%.2f, a total of $%.2f will be returned to you!\n", winnings, machineBalance);
+        if (winnings-startingBets > 0) {
+            System.out.printf("Congratulations, you have won $%.2f, a total of $%.2f will be returned to you!\n", (winnings-startingBets), (machineBalance + winnings));
         } else {
-            System.out.printf("Sorry, you have lost $%.2f, a total of $%.2f will be returned to you!\n", winnings, machineBalance);
+            double returnValue;
+            if((machineBalance + winnings) > 0) {
+                returnValue = (machineBalance + winnings);
+            } else{
+                returnValue = 0;
+            }
+
+            System.out.printf("Sorry, you have lost -$%.2f, a total of $%.2f will be returned to you!\n", Math.abs(winnings-startingBets), returnValue);
         }
         return false;
     }
@@ -203,5 +325,15 @@ public class SlotMachine {
      */
     public static void printStats(double playerBalance, double machineBalance) {
         System.out.printf("Your balance is now $%.2f and there is $%.2f in the machine)\n", playerBalance, machineBalance);
+    }
+
+    /**
+     * Tells user how much they have won
+     * @param rowColumnOrDiagonally How they won(row, column, from where to where diagonally)
+     * @param direction Which direction they won (across, down, diagonally)
+     * @param winnings tells user how much they won
+     */
+    public static void declareWinnings(String rowColumnOrDiagonally, String direction, double winnings){
+        System.out.printf("You won $%.2f on %s %s!", winnings, rowColumnOrDiagonally, direction);
     }
 }
