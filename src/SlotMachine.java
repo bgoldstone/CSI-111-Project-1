@@ -12,12 +12,8 @@ public class SlotMachine {
     //Global Variables
 
     public static void main(String[] args) {
-        //initializes variables
-        boolean flag = true;
         welcome();
-        while (flag) {
-            flag = menu();
-        }
+        menu();
     }
 
     /**
@@ -38,9 +34,8 @@ public class SlotMachine {
     /**
      * Prompts user for choice of what action to do
      *
-     * @return boolean value to see if machine is still running
      */
-    public static boolean menu() {
+    public static void menu() {
         //initializes local variables
         boolean keepGoing = true;
         Scanner scan = new Scanner(System.in);
@@ -49,43 +44,42 @@ public class SlotMachine {
         double betAmount = 1.00;
         double winnings = 0.00;
         double startingBets = 0.00;
+        do {
+            //tells user balances
+            printStats(playerBalance, machineBalance);
 
-        //tells user balances
-        printStats(playerBalance, machineBalance);
+            //prompts user for menu option
+            System.out.print("""
+                    Please select an option:
+                    1. Add Money to the Machine\s""");
+            System.out.printf("\n2. Change bet amount (current bet is $%.2f and the default is $1.00)\n", betAmount);
+            System.out.print("""
+                    3. Play the game
+                    4. Leave the Machine and pay out all of your winnings
+                    Select(1,2,3,4):\s""");
+            int choice = scan.nextInt();
+            System.out.println();
 
-        //prompts user for menu option
-        System.out.print("""
-                Please select an option:
-                1. Add Money to the Machine\s""");
-        System.out.printf("\n2. Change bet amount (current bet is $%.2f and the default is $1.00)\n", betAmount);
-        System.out.print("""
-                3. Play the game
-                4. Leave the Machine and pay out all of your winnings
-                Select(1,2,3,4):\s""");
-        int choice = scan.nextInt();
-        System.out.println();
-
-        //selects method relevant to selection
-        switch (choice) {
-            case 1 -> {
-                double[] changeMoney = addMoney(scan, playerBalance, machineBalance);
-                playerBalance = changeMoney[0];
-                machineBalance = changeMoney[1];
+            //selects method relevant to selection
+            switch (choice) {
+                case 1 -> {
+                    double[] changeMoney = addMoney(scan, playerBalance, machineBalance);
+                    playerBalance = changeMoney[0];
+                    machineBalance = changeMoney[1];
+                }
+                case 2 -> betAmount = changeBetAmount(scan, playerBalance, machineBalance, betAmount);
+                case 3 -> {
+                    double[] returnValues = play(playerBalance, machineBalance, betAmount, startingBets);
+                    playerBalance = returnValues[0];
+                    machineBalance = returnValues[1];
+                    betAmount = returnValues[2];
+                    winnings += returnValues[3];
+                    startingBets += returnValues[4];
+                }
+                case 4 -> keepGoing = cashOut(winnings, startingBets, machineBalance);
+                default -> System.out.print("\nInvalid Choice, ");
             }
-            case 2 -> betAmount = changeBetAmount(scan, playerBalance, machineBalance, betAmount);
-            case 3 -> {
-                double[] returnValues = play(playerBalance, machineBalance, betAmount, startingBets);
-                playerBalance = returnValues[0];
-                machineBalance = returnValues[1];
-                betAmount = returnValues[2];
-                winnings += returnValues[3];
-                startingBets += returnValues[4];
-            }
-            case 4 -> keepGoing = cashOut(winnings, startingBets, machineBalance);
-            default -> System.out.print("\nInvalid Choice, ");
-        }
-        return keepGoing;
-
+        }while (keepGoing);
     }
 
     /**
@@ -115,7 +109,7 @@ public class SlotMachine {
                 flag = false;
             }
         } while (flag);
-        return new double[]{playerBalance, machineBalance};
+        return new double[] {playerBalance,machineBalance};
     }
 
     /**
@@ -196,91 +190,91 @@ public class SlotMachine {
             }
         }
         System.out.println("\n");
-        for (int i = 0; i < reels.length; i++) {
-            System.out.println(Arrays.toString(reels[i]));
+        for (String[] reel : reels) {
+            System.out.println(Arrays.toString(reel));
         }
         System.out.println();
 
         //checks Winning conditions
 
         //if three or two across
-        if (reels[0][0] == reels[0][1] && reels[0][1] == reels[0][2]) {
+        if (reels[0][0].equals(reels[0][1]) && reels[0][1].equals(reels[0][2])) {
             winnings += (betAmount * 3);
             startingBets += betAmount;
             declareWinnings("top row","across",betAmount*2);
-        } else if (reels[0][0] == reels[0][1] || reels[0][1] == reels[0][2]) {
+        } else if (reels[0][0].equals(reels[0][1]) || reels[0][1].equals(reels[0][2])) {
             winnings += (betAmount * 2);
             startingBets += betAmount;
             declareWinnings("top row","across",betAmount);
         }
 
-        if (reels[1][0] == reels[1][1] && reels[1][1] == reels[1][2]) {
+        if (reels[1][0].equals(reels[1][1]) && reels[1][1].equals(reels[1][2])) {
             winnings += (betAmount * 3);
             startingBets += betAmount;
             declareWinnings("middle row","across",betAmount*2);
-        } else if (reels[1][0] == reels[1][1] || reels[1][1] == reels[1][2]) {
+        } else if (reels[1][0].equals(reels[1][1]) || reels[1][1].equals(reels[1][2])) {
             winnings += (betAmount * 2);
             startingBets += betAmount;
             declareWinnings("middle row","across",betAmount);
         }
 
-        if (reels[2][0] == reels[2][1] && reels[2][1] == reels[2][2]) {
+        if (reels[2][0].equals(reels[2][1]) && reels[2][1].equals(reels[2][2])) {
             winnings += (betAmount * 3);
             startingBets += betAmount;
             declareWinnings("bottom row","across",betAmount*2);
-        } else if (reels[2][0] == reels[2][1] || reels[2][1] == reels[2][2]) {
+        } else if (reels[2][0].equals(reels[2][1]) || reels[2][1].equals(reels[2][2])) {
             winnings += (betAmount * 2);
             startingBets += betAmount;
             declareWinnings("bottom row","across",betAmount);
         }
 
         //if three or two down
-        if (reels[0][0] == reels[1][0] && reels[1][0] == reels[2][0]) {
+        if (reels[0][0].equals(reels[1][0]) && reels[1][0].equals(reels[2][0])) {
             winnings += (betAmount * 3);
             startingBets += betAmount;
             declareWinnings("left column","down",betAmount*2);
-        } else if (reels[0][0] == reels[1][0] || reels[1][0] == reels[2][0]) {
+        } else if (reels[0][0].equals(reels[1][0]) || reels[1][0].equals(reels[2][0])) {
             winnings += (betAmount * 2);
             startingBets += betAmount;
             declareWinnings("left column","down",betAmount);
         }
 
-        if (reels[0][1] == reels[1][1] && reels[1][1] == reels[2][1]) {
+        if (reels[0][1].equals(reels[1][1]) && reels[1][1].equals(reels[2][1])) {
             winnings += (betAmount * 3);
             startingBets += betAmount;
             declareWinnings("middle column","down",betAmount*2);
-        } else if (reels[0][1] == reels[1][1] || reels[1][1] == reels[2][1]) {
+        } else if (reels[0][1].equals(reels[1][1]) || reels[1][1].equals(reels[2][1])) {
             winnings += (betAmount * 2);
             startingBets += betAmount;
             declareWinnings("middle column","down",betAmount);
         }
 
-        if (reels[0][2] == reels[1][2] && reels[1][2] == reels[2][2]) {
+        if (reels[0][2].equals(reels[1][2]) && reels[1][2].equals(reels[2][2])) {
             winnings += (betAmount * 3);
             startingBets += betAmount;
             declareWinnings("right column","down",betAmount*2);
-        } else if (reels[0][2] == reels[1][2] || reels[1][2] == reels[2][2]) {
+        } else if (reels[0][2].equals(reels[1][2]) || reels[1][2].equals(reels[2][2])) {
             winnings += (betAmount * 2);
             startingBets += betAmount;
             declareWinnings("right column","down",betAmount);
         }
 
         //if two or three diagonal
-        if(reels[0][0] == reels[1][1] && reels[1][1] == reels[2][2]){
+        if(reels[0][0].equals(reels[1][1]) && reels[1][1].equals(reels[2][2])){
             winnings += (betAmount * 3);
             startingBets += betAmount;
             declareWinnings("top left to bottom right","diagonal",betAmount*2);
-        }else if(reels[0][0] == reels[1][1] || reels[1][1] == reels[2][2]){
+        }else if(reels[0][0].equals(reels[1][1]) || reels[1][1].equals(reels[2][2])){
             winnings += (betAmount * 2);
             declareWinnings("top left to bottom right","diagonal",betAmount);
             startingBets += betAmount;
         }
 
-        if(reels[0][2] == reels[1][1] && reels[1][1] == reels[2][0]){
+        if(reels[0][2].equals(reels[1][1]) && reels[1][1].equals(reels[2][0])){
             winnings += (betAmount * 3);
             startingBets += betAmount;
             declareWinnings("bottom left to top right","diagonal",betAmount*2);
-        }else if(reels[0][2] == reels[1][1] || reels[1][1] == reels[2][0]){
+        }else if(reels[0][2].equals(reels[1][1]) || reels[1][1].equals(reels[2][0])){
             winnings += (betAmount * 2);
             startingBets += betAmount;
             declareWinnings("bottom left to top right","diagonal",betAmount);
