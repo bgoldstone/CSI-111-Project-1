@@ -306,7 +306,7 @@ public class SlotMachine {
     }
 
     /**
-     * Tells user how much they have won
+     * Tells user how much they have won for each condition met
      *
      * @param rowColumnOrDiagonally How they won(row, column, from where to where diagonally)
      * @param direction             Which direction they won (across, down, diagonally)
