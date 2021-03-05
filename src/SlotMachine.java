@@ -4,10 +4,10 @@ import java.util.Random;
 import java.util.Scanner;
 
 /**
- * Programmer: Ben Goldstone
- * Date: 3/2/2021
+ * @author Ben Goldstone
+ * @version 3/2/2021
  * Professor: Dr. Joseph Helsing
- * Description: A program that Emulates a Slot Machine.
+ * Description: A program that emulates a slot machine.
  */
 public class SlotMachine {
 
@@ -35,9 +35,10 @@ public class SlotMachine {
      * Prompts user for choice of what action to do
      */
     public static void menu() {
-        //initializes local variables
+        //initializes local variables/objects
         boolean keepGoing = true;
         Scanner scan = new Scanner(System.in);
+        Random rand = new Random();
         double playerBalance = 100.00;
         double machineBalance = 0.00;
         double betAmount = 1.00;
@@ -68,14 +69,17 @@ public class SlotMachine {
                 }
                 case 2 -> betAmount = changeBetAmount(scan, playerBalance, machineBalance, betAmount);
                 case 3 -> {
-                    double[] returnValues = play(playerBalance, machineBalance, betAmount, totalOfBets);
+                    double[] returnValues = play(playerBalance, machineBalance, betAmount, totalOfBets, rand);
                     playerBalance = returnValues[0];
                     machineBalance = returnValues[1];
                     betAmount = returnValues[2];
                     winnings += returnValues[3];
                     totalOfBets += returnValues[4];
                 }
-                case 4 -> keepGoing = cashOut(winnings, totalOfBets, machineBalance);
+                case 4 -> {
+                    cashOut(winnings, totalOfBets, machineBalance);
+                    keepGoing = false;
+                }
                 default -> System.out.print("\nInvalid Choice, ");
             }
         } while (keepGoing);
@@ -107,7 +111,7 @@ public class SlotMachine {
                 playerBalance -= balance;
                 flag = false;
             }
-            sleep();
+            sleep(1);
             System.out.println();
         } while (flag);
         return new double[]{playerBalance, machineBalance};
@@ -163,9 +167,10 @@ public class SlotMachine {
      * @param machineBalance takes the machine's current balance
      * @param betAmount      takes the bet amount for the user
      * @param totalOfBets    keeps track of how many total bets the player has placed in total
+     * @param rand takes in a Random object
      * @return double[] array consisting of {playerBalance, machineBalance, betAmount, winnings, totalOfBets}
      */
-    public static double[] play(double playerBalance, double machineBalance, double betAmount, double totalOfBets) {
+    public static double[] play(double playerBalance, double machineBalance, double betAmount, double totalOfBets, Random rand) {
         //keeps track of winnings for this round
         double winnings = 0;
 
@@ -175,17 +180,18 @@ public class SlotMachine {
             return new double[]{playerBalance, machineBalance, betAmount, winnings, totalOfBets};
         } else {
             System.out.println("The Game is about to start!");
-            sleep();
+            sleep(1);
         }
         //takes bet
         machineBalance -= betAmount;
+
+        //adds to total of bets
         totalOfBets += betAmount;
 
         //initializes variables
         String[] WORDS = {"Computer", "Science", "Java", "Hello", "World", "Professor", "Helsing"};
 
         //initializes random object
-        Random rand = new Random();
         String[][] reels = new String[3][3];
         //Assigns reels
         for (int i = 0; i < reels.length; i++) {
@@ -196,7 +202,7 @@ public class SlotMachine {
         System.out.println("\n");
         for (String[] reel : reels) {
             System.out.printf("%s\t\t%s\t\t%s\n", reel[0], reel[1], reel[2]);
-            sleep();
+            sleep(1);
         }
         System.out.println();
 
@@ -271,7 +277,7 @@ public class SlotMachine {
         machineBalance += winnings;
 
         System.out.println("Your total winnings are $" + (winnings - betAmount));
-        sleep();
+        sleep(1);
         return new double[]{playerBalance, machineBalance, betAmount, winnings, totalOfBets};
     }
 
@@ -281,9 +287,8 @@ public class SlotMachine {
      * @param winnings       takes the amount of winnings for the player
      * @param totalOfBets    adds together all of the bets placed
      * @param machineBalance takes the machine's current balance
-     * @return boolean value to tell the main slot machine to stop going
      */
-    public static boolean cashOut(double winnings, double totalOfBets, double machineBalance) {
+    public static void cashOut(double winnings, double totalOfBets, double machineBalance) {
         System.out.println("Thanks for playing the Slot Machine!!");
         if (winnings - totalOfBets > 0) {
             System.out.printf("Congratulations, you have won $%.2f, a total of $%.2f will be returned to you!\n", (winnings - totalOfBets), machineBalance);
@@ -297,7 +302,6 @@ public class SlotMachine {
 
             System.out.printf("Sorry, you have lost -$%.2f, a total of $%.2f will be returned to you!\n", Math.abs(winnings - totalOfBets), returnValue);
         }
-        return false;
     }
 
     /**
@@ -308,7 +312,7 @@ public class SlotMachine {
      */
     public static void printStats(double playerBalance, double machineBalance) {
         System.out.printf("Your balance is now $%.2f and there is $%.2f in the machine)\n", playerBalance, machineBalance);
-        sleep();
+        sleep(1);
     }
 
     /**
@@ -323,11 +327,13 @@ public class SlotMachine {
     }
 
     /**
-     * Puts process to sleep for 1s(1000ms) to give thinking/reels rotating effect
+     * Puts process to sleep for i seconds to give thinking/reels rotating effect
+     * @param s number of seconds for program to sleep for
      */
-    public static void sleep() {
+    public static void sleep(int s) {
+        s *= 1000;
         try {
-            Thread.sleep(1000);
+            Thread.sleep(s);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
