@@ -167,7 +167,7 @@ public class SlotMachine {
      * @param machineBalance takes the machine's current balance
      * @param betAmount      takes the bet amount for the user
      * @param totalOfBets    keeps track of how many total bets the player has placed in total
-     * @param rand takes in a Random object
+     * @param rand           takes in a Random object
      * @return double[] array consisting of {playerBalance, machineBalance, betAmount, winnings, totalOfBets}
      */
     public static double[] play(double playerBalance, double machineBalance, double betAmount, double totalOfBets, Random rand) {
@@ -211,72 +211,73 @@ public class SlotMachine {
         //if three or two across
         if (reels[0][0].equals(reels[0][1]) && reels[0][1].equals(reels[0][2])) {
             winnings += (betAmount * 3);
-            declareWinnings("top row", "across", betAmount * 2);
+            declareWinnings("top row", "across");
         } else if (reels[0][0].equals(reels[0][1]) || reels[0][1].equals(reels[0][2])) {
             winnings += (betAmount * 2);
-            declareWinnings("top row", "across", betAmount);
+            declareWinnings("top row", "across");
         }
 
         if (reels[1][0].equals(reels[1][1]) && reels[1][1].equals(reels[1][2])) {
             winnings += (betAmount * 3);
-            declareWinnings("middle row", "across", betAmount * 2);
+            declareWinnings("middle row", "across");
         } else if (reels[1][0].equals(reels[1][1]) || reels[1][1].equals(reels[1][2])) {
             winnings += (betAmount * 2);
-            declareWinnings("middle row", "across", betAmount);
+            declareWinnings("middle row", "across");
         }
 
         if (reels[2][0].equals(reels[2][1]) && reels[2][1].equals(reels[2][2])) {
             winnings += (betAmount * 3);
-            declareWinnings("bottom row", "across", betAmount * 2);
+            declareWinnings("bottom row", "across");
         } else if (reels[2][0].equals(reels[2][1]) || reels[2][1].equals(reels[2][2])) {
             winnings += (betAmount * 2);
-            declareWinnings("bottom row", "across", betAmount);
+            declareWinnings("bottom row", "across");
         }
 
         //if three or two down
         if (reels[0][0].equals(reels[1][0]) && reels[1][0].equals(reels[2][0])) {
             winnings += (betAmount * 3);
-            declareWinnings("left column", "down", betAmount * 2);
+            declareWinnings("left column", "down");
         } else if (reels[0][0].equals(reels[1][0]) || reels[1][0].equals(reels[2][0])) {
             winnings += (betAmount * 2);
-            declareWinnings("left column", "down", betAmount);
+            declareWinnings("left column", "down");
         }
 
         if (reels[0][1].equals(reels[1][1]) && reels[1][1].equals(reels[2][1])) {
             winnings += (betAmount * 3);
-            declareWinnings("middle column", "down", betAmount * 2);
+            declareWinnings("middle column", "down");
         } else if (reels[0][1].equals(reels[1][1]) || reels[1][1].equals(reels[2][1])) {
             winnings += (betAmount * 2);
-            declareWinnings("middle column", "down", betAmount);
+            declareWinnings("middle column", "down");
         }
 
         if (reels[0][2].equals(reels[1][2]) && reels[1][2].equals(reels[2][2])) {
             winnings += (betAmount * 3);
-            declareWinnings("right column", "down", betAmount * 2);
+            declareWinnings("right column", "down");
         } else if (reels[0][2].equals(reels[1][2]) || reels[1][2].equals(reels[2][2])) {
             winnings += (betAmount * 2);
-            declareWinnings("right column", "down", betAmount);
+            declareWinnings("right column", "down");
         }
 
         //if two or three diagonal
         if (reels[0][0].equals(reels[1][1]) && reels[1][1].equals(reels[2][2])) {
             winnings += (betAmount * 3);
-            declareWinnings("top left to bottom right", "diagonal", betAmount * 2);
+            declareWinnings("top left to bottom right", "diagonal");
         } else if (reels[0][0].equals(reels[1][1]) || reels[1][1].equals(reels[2][2])) {
-            declareWinnings("top left to bottom right", "diagonal", betAmount);
+            winnings += (betAmount * 2);
+            declareWinnings("top left to bottom right", "diagonal");
         }
 
         if (reels[0][2].equals(reels[1][1]) && reels[1][1].equals(reels[2][0])) {
             winnings += (betAmount * 3);
-            declareWinnings("bottom left to top right", "diagonal", betAmount * 2);
+            declareWinnings("bottom left to top right", "diagonal");
         } else if (reels[0][2].equals(reels[1][1]) || reels[1][1].equals(reels[2][0])) {
             winnings += (betAmount * 2);
-            declareWinnings("bottom left to top right", "diagonal", betAmount);
+            declareWinnings("bottom left to top right", "diagonal");
         }
         //adds winnings to total balance
         machineBalance += winnings;
 
-        System.out.println("Your total winnings are $" + (winnings - betAmount));
+        System.out.printf("Your total winnings are $%.2f\n", (winnings - betAmount));
         sleep(1);
         return new double[]{playerBalance, machineBalance, betAmount, winnings, totalOfBets};
     }
@@ -320,14 +321,14 @@ public class SlotMachine {
      *
      * @param rowColumnOrDiagonally How they won(row, column, from where to where diagonally)
      * @param direction             Which direction they won (across, down, diagonally)
-     * @param winnings              tells user how much they won
      */
-    public static void declareWinnings(String rowColumnOrDiagonally, String direction, double winnings) {
-        System.out.printf("You won an additional $%.2f on top of your bet on %s %s!\n", winnings, rowColumnOrDiagonally, direction);
+    public static void declareWinnings(String rowColumnOrDiagonally, String direction) {
+        System.out.printf("You won on %s %s!\n", rowColumnOrDiagonally, direction);
     }
 
     /**
      * Puts process to sleep for s seconds to give thinking/reels rotating effect
+     *
      * @param s number of seconds for program to sleep for
      */
     public static void sleep(int s) {
