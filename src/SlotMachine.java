@@ -1,4 +1,5 @@
 //import used libraries
+
 import java.util.Random;
 import java.util.Scanner;
 
@@ -161,12 +162,14 @@ public class SlotMachine {
      * @param playerBalance  takes the player's current balance
      * @param machineBalance takes the machine's current balance
      * @param betAmount      takes the bet amount for the user
-     * @param totalOfBets    keeps track of how many total bets you have placed total
+     * @param totalOfBets    keeps track of how many total bets the player has placed in total
      * @return double[] array consisting of {playerBalance, machineBalance, betAmount, winnings, totalOfBets}
      */
     public static double[] play(double playerBalance, double machineBalance, double betAmount, double totalOfBets) {
         //keeps track of winnings for this round
         double winnings = 0;
+
+        //checks betAmount is valid
         if (machineBalance - betAmount < 0) {
             System.out.println("Not enough money in the Machine! Try adding more money to the machine");
             return new double[]{playerBalance, machineBalance, betAmount, winnings, totalOfBets};
@@ -174,10 +177,13 @@ public class SlotMachine {
             System.out.println("The Game is about to start!");
             sleep();
         }
+        //takes bet
         machineBalance -= betAmount;
         totalOfBets += betAmount;
+
         //initializes variables
         String[] WORDS = {"Computer", "Science", "Java", "Hello", "World", "Professor", "Helsing"};
+
         //initializes random object
         Random rand = new Random();
         String[][] reels = new String[3][3];
@@ -194,7 +200,7 @@ public class SlotMachine {
         }
         System.out.println();
 
-        //checks Winning conditions
+        //checks winning conditions
 
         //if three or two across
         if (reels[0][0].equals(reels[0][1]) && reels[0][1].equals(reels[0][2])) {
@@ -261,7 +267,9 @@ public class SlotMachine {
             winnings += (betAmount * 2);
             declareWinnings("bottom left to top right", "diagonal", betAmount);
         }
+        //adds winnings to total balance
         machineBalance += winnings;
+
         System.out.println("Your total winnings are $" + (winnings - betAmount));
         sleep();
         return new double[]{playerBalance, machineBalance, betAmount, winnings, totalOfBets};
@@ -315,7 +323,7 @@ public class SlotMachine {
     }
 
     /**
-     * Puts process to sleep to give thinking/reels rotating effect
+     * Puts process to sleep for 1s(1000ms) to give thinking/reels rotating effect
      */
     public static void sleep() {
         try {
