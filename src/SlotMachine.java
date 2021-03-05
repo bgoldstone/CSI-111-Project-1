@@ -327,7 +327,7 @@ public class SlotMachine {
     }
 
     /**
-     * Puts process to sleep for i seconds to give thinking/reels rotating effect
+     * Puts process to sleep for s seconds to give thinking/reels rotating effect
      * @param s number of seconds for program to sleep for
      */
     public static void sleep(int s) {
