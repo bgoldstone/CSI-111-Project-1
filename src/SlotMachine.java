@@ -3,36 +3,46 @@
 import java.util.Random;
 import java.util.Scanner;
 
-/**
- * @author Ben Goldstone
- * @version 3/2/2021
+
+/*
+ * Name: Ben Goldstone
+ * Date: 3/2/2021
  * Professor: Dr. Joseph Helsing
  * Description: A program that emulates a slot machine.
  */
-public class SlotMachine {
 
+/**
+ * Main SlotMachine class.
+ */
+public class SlotMachine {
+    /**
+     * Main method
+     * @param args pass through parameters
+     */
     public static void main(String[] args) {
         welcome();
         menu();
     }
 
     /**
-     * Prints Welcome message
+     * Prints Welcome message.
      */
     public static void welcome() {
-        System.out.println("#".repeat(32));
+        int repeatChar = 32; //times to repeat string
+        String sideBar = "##                            ##";
+        System.out.println("#".repeat(repeatChar));
         System.out.println("##   Welcome to the Casino!   ##");
-        System.out.println("##                            ##");
+        System.out.println(sideBar);
         System.out.println("## Default Starting bet is $1 ##");
-        System.out.println("##                            ##");
+        System.out.println(sideBar);
         System.out.println("##  Player starts with $100   ##");
-        System.out.println("##                            ##");
-        System.out.println("#".repeat(32));
+        System.out.println(sideBar);
+        System.out.println("#".repeat(repeatChar));
 
     }
 
     /**
-     * Prompts user for choice of what action to do
+     * Prompts user for choice of what action to do.
      */
     public static void menu() {
         //initializes local variables/objects
@@ -86,7 +96,7 @@ public class SlotMachine {
     }
 
     /**
-     * Allows user to add money to the machine
+     * Allows user to add money to the machine.
      *
      * @param scan           Takes a scanner for user input
      * @param playerBalance  takes the player's current balance
@@ -98,7 +108,8 @@ public class SlotMachine {
         double balance;
         do {
             //prompts user for how much money to add
-            System.out.printf("\nHow Much money would you like to add? (you have a balance of $%.2f and there is $%.2f in the machine): $", playerBalance, machineBalance);
+            System.out.printf("\nHow Much money would you like to add? " +
+                    "(you have a balance of $%.2f and there is $%.2f in the machine): $", playerBalance, machineBalance);
             balance = scan.nextDouble();
 
             //checks if user has that much money to bet
@@ -118,7 +129,7 @@ public class SlotMachine {
     }
 
     /**
-     * Allows user to change bet amount
+     * Allows user to change bet amount.
      *
      * @param scan           Takes a scanner for user input
      * @param playerBalance  takes the player's current balance
@@ -134,7 +145,8 @@ public class SlotMachine {
         //loops till bet is above $1.00 and in range of what player has
         do {
             //gets input from user
-            System.out.print("How much money would you like to add to the machine? (Must be $1.00 or above) $");
+            System.out.print("How much money would you like to add to the machine? " +
+                    "(Must be $1.00 or above) $");
             amount = scan.nextDouble();
             System.out.println();
             //checks if user has that much money to bet
@@ -161,7 +173,7 @@ public class SlotMachine {
     }
 
     /**
-     * Allows user to play the game
+     * Allows user to play the game.
      *
      * @param playerBalance  takes the player's current balance
      * @param machineBalance takes the machine's current balance
