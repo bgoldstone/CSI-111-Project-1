@@ -34,6 +34,7 @@ public class SlotMachine {
         System.out.println("##  Player starts with $100   ##");
         System.out.println("##                            ##");
         System.out.println("#".repeat(32));
+        sleep(2);
     }
 
     /**
@@ -57,13 +58,12 @@ public class SlotMachine {
             System.out.print("""
                     Please select an option:
                     1. Add Money to the Machine\s""");
-            System.out.printf("\n2. Change bet amount (current bet is $%.2f and the default is $1.00)\n", betAmount);
+            System.out.printf("%n2. Change bet amount (current bet is $%.2f and the default is $1.00)%n", betAmount);
             System.out.print("""
                     3. Play the game
                     4. Leave the Machine and pay out all of your winnings
                     Select(1,2,3,4):\s""");
             int choice = scan.nextInt();
-            System.out.println();
 
             //selects method relevant to selection
             switch (choice) {
@@ -102,7 +102,7 @@ public class SlotMachine {
         double balance;
         do {
             //prompts user for how much money to add
-            System.out.printf("\nHow Much money would you like to add? " +
+            System.out.printf("%nHow Much money would you like to add? " +
                     "(you have a balance of $%.2f and there is $%.2f in the machine): $", playerBalance, machineBalance);
             balance = scan.nextDouble();
 
@@ -137,20 +137,19 @@ public class SlotMachine {
         //loops till bet is above $1.00 and in range of what player has
         do {
             //gets input from user
-            System.out.print("How much money would you like to add to the machine? " +
+            System.out.print("\nHow much money would you like to add to the machine? " +
                     "(Must be $1.00 or above) $");
             amount = scan.nextDouble();
-            System.out.println();
             //checks if user has that much money to bet
             if (amount > playerBalance) {
-                System.out.println("Invalid bet, please change how much you are betting. " +
+                System.out.println("\nInvalid bet, please change how much you are betting. " +
                         "(This cannot be over how much money you have)");
                 printStats(playerBalance, machineBalance);
             }
 
             //makes sure bet is not below $1.00
             if (amount < 1) {
-                System.out.println("Sorry the default bet is 1.00, Please try again.");
+                System.out.println("\nSorry the default bet is 1.00, Please try again.");
             } else {
                 betAmount = amount;
                 break;
@@ -158,8 +157,7 @@ public class SlotMachine {
         } while (true);
 
         //Tells user the bet
-        System.out.printf("Your bet has been placed at $ %.2f\n\n", betAmount);
-        System.out.println();
+        System.out.printf("Your bet has been placed at $ %.2f%n%n%n", betAmount);
         return betAmount;
     }
 
@@ -179,10 +177,10 @@ public class SlotMachine {
 
         //checks betAmount is valid
         if (machineBalance - betAmount < 0) {
-            System.out.println("Not enough money in the Machine! Try adding more money to the machine");
+            System.out.println("\nNot enough money in the Machine! Try adding more money to the machine");
             return new double[]{playerBalance, machineBalance, betAmount, winnings, totalOfBets};
         } else {
-            System.out.println("The Game is about to start!");
+            System.out.println("\nThe Game is about to start!");
             sleep(1);
         }
         //takes bet
@@ -205,7 +203,7 @@ public class SlotMachine {
         }
         System.out.println("\n");
         for (String[] reel : reels) {
-            System.out.printf("%s\t\t%s\t\t%s\n", reel[0], reel[1], reel[2]);
+            System.out.printf("%s\t\t%s\t\t%s%n", reel[0], reel[1], reel[2]);
             sleep(1);
         }
 
@@ -279,7 +277,7 @@ public class SlotMachine {
         //adds winnings to total balance
         machineBalance += winnings;
 
-        System.out.printf("\nYour total winnings are $%.2f\n", (winnings - betAmount));
+        System.out.printf("%nYour total winnings are $%.2f%n", (winnings - betAmount));
         sleep(1);
         return new double[]{playerBalance, machineBalance, betAmount, winnings, totalOfBets};
     }
@@ -294,7 +292,7 @@ public class SlotMachine {
     public static void cashOut(double winnings, double totalOfBets, double machineBalance) {
         System.out.println("Thanks for playing the Slot Machine!!");
         if (winnings - totalOfBets > 0) {
-            System.out.printf("Congratulations, you have won $%.2f, a total of $%.2f will be returned to you!\n", (winnings - totalOfBets), machineBalance);
+            System.out.printf("Congratulations, you have won $%.2f, a total of $%.2f will be returned to you!%n", (winnings - totalOfBets), machineBalance);
         } else {
             double returnValue;
             if ((machineBalance + winnings) > 0) {
@@ -303,7 +301,7 @@ public class SlotMachine {
                 returnValue = 0;
             }
 
-            System.out.printf("Sorry, you have lost -$%.2f, a total of $%.2f will be returned to you!\n", Math.abs(winnings - totalOfBets), returnValue);
+            System.out.printf("Sorry, you have lost -$%.2f, a total of $%.2f will be returned to you!%n", Math.abs(winnings - totalOfBets), returnValue);
         }
     }
 
@@ -314,7 +312,7 @@ public class SlotMachine {
      * @param machineBalance takes the machine's current balance
      */
     public static void printStats(double playerBalance, double machineBalance) {
-        System.out.printf("Your balance is now $%.2f and there is $%.2f in the machine)\n", playerBalance, machineBalance);
+        System.out.printf("Your balance is now $%.2f and there is $%.2f in the machine)%n", playerBalance, machineBalance);
         sleep(1);
     }
 
@@ -325,7 +323,7 @@ public class SlotMachine {
      * @param direction             Which direction they won (across, down, diagonally)
      */
     public static void declareWinnings(String rowColumnOrDiagonally, String direction) {
-        System.out.printf("\nYou won on %s %s!", rowColumnOrDiagonally, direction);
+        System.out.printf("%nYou won on %s %s!", rowColumnOrDiagonally, direction);
     }
 
     /**
