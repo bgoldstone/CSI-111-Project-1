@@ -1,9 +1,3 @@
-//import used libraries
-
-import java.util.Random;
-import java.util.Scanner;
-
-
 /*
  * Name: Ben Goldstone
  * Date: 3/2/2021
@@ -11,13 +5,17 @@ import java.util.Scanner;
  * Description: A program that emulates a slot machine.
  */
 
+//import used libraries
+
+import java.util.Random;
+import java.util.Scanner;
+
 /**
  * Main SlotMachine class.
  */
 public class SlotMachine {
     /**
      * Main method
-     * @param args pass through parameters
      */
     public static void main(String[] args) {
         welcome();
@@ -28,17 +26,14 @@ public class SlotMachine {
      * Prints Welcome message.
      */
     public static void welcome() {
-        int repeatChar = 32; //times to repeat string
-        String sideBar = "##                            ##";
-        System.out.println("#".repeat(repeatChar));
+        System.out.println("#".repeat(32));
         System.out.println("##   Welcome to the Casino!   ##");
-        System.out.println(sideBar);
+        System.out.println("##                            ##");
         System.out.println("## Default Starting bet is $1 ##");
-        System.out.println(sideBar);
+        System.out.println("##                            ##");
         System.out.println("##  Player starts with $100   ##");
-        System.out.println(sideBar);
-        System.out.println("#".repeat(repeatChar));
-
+        System.out.println("##                            ##");
+        System.out.println("#".repeat(32));
     }
 
     /**
@@ -46,14 +41,14 @@ public class SlotMachine {
      */
     public static void menu() {
         //initializes local variables/objects
-        boolean keepGoing = true;
+        boolean flag = true;
         Scanner scan = new Scanner(System.in);
         Random rand = new Random();
-        double playerBalance = 100.00;
-        double machineBalance = 0.00;
-        double betAmount = 1.00;
-        double winnings = 0.00;
-        double totalOfBets = 0.00;
+        double playerBalance = 100;
+        double machineBalance = 0;
+        double betAmount = 1;
+        double winnings = 0;
+        double totalOfBets = 0;
         do {
             //tells user balances
             printStats(playerBalance, machineBalance);
@@ -77,7 +72,7 @@ public class SlotMachine {
                     playerBalance = changeMoney[0];
                     machineBalance = changeMoney[1];
                 }
-                case 2 -> betAmount = changeBetAmount(scan, playerBalance, machineBalance, betAmount);
+                case 2 -> betAmount = changeBetAmount(scan, playerBalance, machineBalance);
                 case 3 -> {
                     double[] returnValues = play(playerBalance, machineBalance, betAmount, totalOfBets, rand);
                     playerBalance = returnValues[0];
@@ -88,11 +83,11 @@ public class SlotMachine {
                 }
                 case 4 -> {
                     cashOut(winnings, totalOfBets, machineBalance);
-                    keepGoing = false;
+                    flag = false;
                 }
                 default -> System.out.print("\nInvalid Choice, ");
             }
-        } while (keepGoing);
+        } while (flag);
     }
 
     /**
@@ -104,7 +99,6 @@ public class SlotMachine {
      * @return a double[] array consisting of {playerBalance, machineBalance}
      */
     public static double[] addMoney(Scanner scan, double playerBalance, double machineBalance) {
-        boolean flag = true;
         double balance;
         do {
             //prompts user for how much money to add
@@ -120,11 +114,11 @@ public class SlotMachine {
             } else {
                 machineBalance += balance;
                 playerBalance -= balance;
-                flag = false;
+                break;
             }
             sleep(1);
             System.out.println();
-        } while (flag);
+        } while (true);
         return new double[]{playerBalance, machineBalance};
     }
 
@@ -134,14 +128,12 @@ public class SlotMachine {
      * @param scan           Takes a scanner for user input
      * @param playerBalance  takes the player's current balance
      * @param machineBalance takes the machine's current balance
-     * @param betAmount      takes the bet amount for the user
      * @return double of new betAmount value;
      */
-    public static double changeBetAmount(Scanner scan, double playerBalance, double machineBalance, double betAmount) {
+    public static double changeBetAmount(Scanner scan, double playerBalance, double machineBalance) {
         //variable declaration
-        boolean flag = true;
         double amount;
-
+        double betAmount;
         //loops till bet is above $1.00 and in range of what player has
         do {
             //gets input from user
@@ -154,17 +146,16 @@ public class SlotMachine {
                 System.out.println("Invalid bet, please change how much you are betting. " +
                         "(This cannot be over how much money you have)");
                 printStats(playerBalance, machineBalance);
-
             }
 
             //makes sure bet is not below $1.00
-            if (amount < 1.00) {
+            if (amount < 1) {
                 System.out.println("Sorry the default bet is 1.00, Please try again.");
             } else {
                 betAmount = amount;
-                flag = false;
+                break;
             }
-        } while (flag);
+        } while (true);
 
         //Tells user the bet
         System.out.printf("Your bet has been placed at $ %.2f\n\n", betAmount);
@@ -205,6 +196,7 @@ public class SlotMachine {
 
         //initializes random object
         String[][] reels = new String[3][3];
+
         //Assigns reels
         for (int i = 0; i < reels.length; i++) {
             for (int j = 0; j < reels[i].length; j++) {
@@ -216,80 +208,78 @@ public class SlotMachine {
             System.out.printf("%s\t\t%s\t\t%s\n", reel[0], reel[1], reel[2]);
             sleep(1);
         }
-        System.out.println();
 
         //checks winning conditions
-
         //if three or two across
         if (reels[0][0].equals(reels[0][1]) && reels[0][1].equals(reels[0][2])) {
-            winnings += (betAmount * 3);
+            winnings += betAmount * 3;
             declareWinnings("top row", "across");
         } else if (reels[0][0].equals(reels[0][1]) || reels[0][1].equals(reels[0][2])) {
-            winnings += (betAmount * 2);
+            winnings += betAmount * 2;
             declareWinnings("top row", "across");
         }
 
         if (reels[1][0].equals(reels[1][1]) && reels[1][1].equals(reels[1][2])) {
-            winnings += (betAmount * 3);
+            winnings += betAmount * 3;
             declareWinnings("middle row", "across");
         } else if (reels[1][0].equals(reels[1][1]) || reels[1][1].equals(reels[1][2])) {
-            winnings += (betAmount * 2);
+            winnings += betAmount * 2;
             declareWinnings("middle row", "across");
         }
 
         if (reels[2][0].equals(reels[2][1]) && reels[2][1].equals(reels[2][2])) {
-            winnings += (betAmount * 3);
+            winnings += betAmount * 3;
             declareWinnings("bottom row", "across");
         } else if (reels[2][0].equals(reels[2][1]) || reels[2][1].equals(reels[2][2])) {
-            winnings += (betAmount * 2);
+            winnings += betAmount * 2;
             declareWinnings("bottom row", "across");
         }
 
         //if three or two down
         if (reels[0][0].equals(reels[1][0]) && reels[1][0].equals(reels[2][0])) {
-            winnings += (betAmount * 3);
+            winnings += betAmount * 3;
             declareWinnings("left column", "down");
         } else if (reels[0][0].equals(reels[1][0]) || reels[1][0].equals(reels[2][0])) {
-            winnings += (betAmount * 2);
+            winnings += betAmount * 2;
             declareWinnings("left column", "down");
         }
 
         if (reels[0][1].equals(reels[1][1]) && reels[1][1].equals(reels[2][1])) {
-            winnings += (betAmount * 3);
+            winnings += betAmount * 3;
             declareWinnings("middle column", "down");
         } else if (reels[0][1].equals(reels[1][1]) || reels[1][1].equals(reels[2][1])) {
-            winnings += (betAmount * 2);
+            winnings += betAmount * 2;
             declareWinnings("middle column", "down");
         }
 
         if (reels[0][2].equals(reels[1][2]) && reels[1][2].equals(reels[2][2])) {
-            winnings += (betAmount * 3);
+            winnings += betAmount * 3;
             declareWinnings("right column", "down");
         } else if (reels[0][2].equals(reels[1][2]) || reels[1][2].equals(reels[2][2])) {
-            winnings += (betAmount * 2);
+            winnings += betAmount * 2;
             declareWinnings("right column", "down");
         }
 
         //if two or three diagonal
         if (reels[0][0].equals(reels[1][1]) && reels[1][1].equals(reels[2][2])) {
-            winnings += (betAmount * 3);
+            winnings += betAmount * 3;
             declareWinnings("top left to bottom right", "diagonal");
         } else if (reels[0][0].equals(reels[1][1]) || reels[1][1].equals(reels[2][2])) {
-            winnings += (betAmount * 2);
+            winnings += betAmount * 2;
             declareWinnings("top left to bottom right", "diagonal");
         }
 
         if (reels[0][2].equals(reels[1][1]) && reels[1][1].equals(reels[2][0])) {
-            winnings += (betAmount * 3);
+            winnings += betAmount * 3;
             declareWinnings("bottom left to top right", "diagonal");
         } else if (reels[0][2].equals(reels[1][1]) || reels[1][1].equals(reels[2][0])) {
-            winnings += (betAmount * 2);
+            winnings += betAmount * 2;
             declareWinnings("bottom left to top right", "diagonal");
         }
         //adds winnings to total balance
         machineBalance += winnings;
 
-        System.out.printf("Your total winnings are $%.2f\n", (winnings - betAmount));
+        System.out.printf("\nYour total winnings are $%.2f\n", (winnings - betAmount));
         sleep(1);
         return new double[]{playerBalance, machineBalance, betAmount, winnings, totalOfBets};
     }
@@ -335,18 +325,18 @@ public class SlotMachine {
      * @param direction             Which direction they won (across, down, diagonally)
      */
     public static void declareWinnings(String rowColumnOrDiagonally, String direction) {
-        System.out.printf("You won on %s %s!\n", rowColumnOrDiagonally, direction);
+        System.out.printf("\nYou won on %s %s!", rowColumnOrDiagonally, direction);
     }
 
     /**
      * Puts process to sleep for s seconds to give thinking/reels rotating effect
      *
-     * @param s number of seconds for program to sleep for
+     * @param seconds number of seconds for program to sleep for
      */
-    public static void sleep(int s) {
-        s *= 1000;
+    public static void sleep(int seconds) {
+        seconds *= 1000;
         try {
-            Thread.sleep(s);
+            Thread.sleep(seconds);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
