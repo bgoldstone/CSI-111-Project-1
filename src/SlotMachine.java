@@ -60,16 +60,25 @@ public class SlotMachine {
                             3. Play the game
                             4. Leave the Machine and pay out all of your winnings
                             Select Option:\s""";
-            //int choice = scan.nextInt();
-            int choice = JOptionPane.showOptionDialog(null,
-                    msg,
+            String input = (String) JOptionPane.showInputDialog(null, msg,
                     "Enter a menu choice",
-                    JOptionPane.DEFAULT_OPTION,
-                    JOptionPane.INFORMATION_MESSAGE,
+                    JOptionPane.QUESTION_MESSAGE,
                     null,
                     options,
                     options[0]);
+            int choice = 0;
+            if (input == null) {
+                JOptionPane.showMessageDialog(null, "Invalid Selection!!");
+                continue;
+            }
 
+            //Assigns text response to numeric value
+            for (int i = 0; i < options.length; i++) {
+                if (input.equals(options[i])) {
+                    choice = i;
+                    break;
+                }
+            }
             //selects method relevant to selection
             switch (choice) {
                 case 0 -> {
@@ -194,7 +203,6 @@ public class SlotMachine {
             return new double[]{playerBalance, machineBalance, betAmount, winnings, totalOfBets};
         } else {
             JOptionPane.showMessageDialog(null, "The Game is about to start!");
-            sleep(1);
         }
         //takes bet
         machineBalance -= betAmount;
@@ -219,7 +227,7 @@ public class SlotMachine {
             reelPrint.append(String.format("%s        %s        %s%n", reel[0], reel[1], reel[2]));
         }
         JOptionPane.showMessageDialog(null, reelPrint.toString());
-
+        System.out.println(reelPrint.toString());
         //checks winning conditions
         //if three or two across
         if (reels[0][0].equals(reels[0][1]) && reels[0][1].equals(reels[0][2])) {
@@ -343,19 +351,5 @@ public class SlotMachine {
     public static void declareWinnings(String rowColumnOrDiagonally, String direction) {
         String declareWin = String.format("%nYou won on %s %s!", rowColumnOrDiagonally, direction);
         JOptionPane.showMessageDialog(null, declareWin);
-    }
-
-    /**
-     * Puts process to sleep for s seconds to give thinking/reels rotating effect
-     *
-     * @param seconds number of seconds for program to sleep for
-     */
-    public static void sleep(int seconds) {
-        seconds *= 1000;
-        try {
-            Thread.sleep(seconds);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 }
