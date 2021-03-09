@@ -46,7 +46,7 @@ public class SlotMachine {
         double betAmount = 1;
         double winnings = 0;
         double totalOfBets = 0;
-        String[] options = {"Add Money", "Change Bet Amount", "Play", "Cash Out"};
+        String[] options = {"Please select an option....","Add Money", "Change Bet Amount", "Play", "Cash Out and Leave"};
         printStats(playerBalance, machineBalance);
         do {
             //tells user balances
@@ -81,14 +81,14 @@ public class SlotMachine {
             }
             //selects method relevant to selection
             switch (choice) {
-                case 0 -> {
+                case 1 -> {
                     double[] changeMoney = addMoney(playerBalance, machineBalance);
                     playerBalance = changeMoney[0];
                     machineBalance = changeMoney[1];
                     printStats(playerBalance, machineBalance);
                 }
-                case 1 -> betAmount = changeBetAmount(playerBalance, machineBalance);
-                case 2 -> {
+                case 2 -> betAmount = changeBetAmount(playerBalance, machineBalance);
+                case 3 -> {
                     double[] returnValues = play(playerBalance, machineBalance, betAmount, totalOfBets, rand);
                     playerBalance = returnValues[0];
                     machineBalance = returnValues[1];
@@ -97,11 +97,11 @@ public class SlotMachine {
                     totalOfBets += returnValues[4];
                     printStats(playerBalance, machineBalance);
                 }
-                case 3 -> {
+                case 4 -> {
                     cashOut(winnings, totalOfBets, machineBalance);
                     flag = false;
                 }
-                default -> JOptionPane.showMessageDialog(null, "Invalid Choice");
+                default -> JOptionPane.showMessageDialog(null, "Please select one of the four actions.");
             }
         } while (flag);
     }
@@ -119,14 +119,14 @@ public class SlotMachine {
             //prompts user for how much money to add
             String msg = String.format("%nHow Much money would you like to add? " +
                     "(you have a balance of $%.2f and there is $%.2f in the machine): $", playerBalance, machineBalance);
-            String input = JOptionPane.showInputDialog(msg, "0");
+            String input = JOptionPane.showInputDialog(msg, "1.00");
             if (input == null) {
                 JOptionPane.showMessageDialog(null, "Invalid Input!");
                 continue;
             } else {
                 balance = Double.parseDouble(input);
             }
-            //checks if user has that much money to bet
+            //checks if user has that much money to add
             if (balance > playerBalance || balance < 0) {
                 JOptionPane.showMessageDialog(null, "Invalid amount, please change how much you are depositing. " +
                         "(This cannot be over how much money you have or negative)");
@@ -155,7 +155,7 @@ public class SlotMachine {
         do {
             //gets input from user
             String msg = "How much money would you like to add to the machine? (Must be $1.00 or above) $";
-            String input = JOptionPane.showInputDialog(msg, "1");
+            String input = JOptionPane.showInputDialog(msg, "1.00");
             //checks if user has that much money to bet
             if (input == null) {
                 JOptionPane.showMessageDialog(null, "Invalid Input!");
@@ -312,7 +312,7 @@ public class SlotMachine {
      */
     public static void cashOut(double winnings, double totalOfBets, double machineBalance) {
         JOptionPane.showMessageDialog(null, "Thanks for playing the Slot Machine!!");
-        if (winnings - totalOfBets > 0) {
+        if (winnings - totalOfBets >= 0) {
             String printWinnings = String.format("Congratulations, you have won $%.2f, a total of $%.2f will be returned to you!%n",
                     (winnings - totalOfBets), machineBalance);
             JOptionPane.showMessageDialog(null, printWinnings);
