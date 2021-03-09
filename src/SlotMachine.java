@@ -7,8 +7,8 @@
 
 //import used libraries
 
+import javax.swing.*;
 import java.util.Random;
-import java.util.Scanner;
 
 /**
  * Main SlotMachine class.
@@ -26,15 +26,12 @@ public class SlotMachine {
      * Prints Welcome message.
      */
     public static void welcome() {
-        System.out.println("#".repeat(32));
-        System.out.println("##   Welcome to the Casino!   ##");
-        System.out.println("##                            ##");
-        System.out.println("## Default Starting bet is $1 ##");
-        System.out.println("##                            ##");
-        System.out.println("##  Player starts with $100   ##");
-        System.out.println("##                            ##");
-        System.out.println("#".repeat(32));
-        sleep(2);
+        String welcome = "#".repeat(32) +
+                "\n##    Welcome to the Casino!    ##" +
+                "\n\n##  Default Starting bet is $1  ##" +
+                "\n\n##   Player starts with $100    ##\n\n" +
+                "#".repeat(32);
+        JOptionPane.showMessageDialog(null, welcome);
     }
 
     /**
@@ -43,49 +40,59 @@ public class SlotMachine {
     public static void menu() {
         //initializes local variables/objects
         boolean flag = true;
-        Scanner scan = new Scanner(System.in);
         Random rand = new Random();
         double playerBalance = 100;
         double machineBalance = 0;
         double betAmount = 1;
         double winnings = 0;
         double totalOfBets = 0;
+        String[] options = {"Add Money", "Change Bet Amount", "Play", "Cash Out"};
+        printStats(playerBalance, machineBalance);
         do {
             //tells user balances
-            printStats(playerBalance, machineBalance);
 
             //prompts user for menu option
-            System.out.print("""
+            String msg = """
                     Please select an option:
-                    1. Add Money to the Machine\s""");
-            System.out.printf("%n2. Change bet amount (current bet is $%.2f and the default is $1.00)%n", betAmount);
-            System.out.print("""
-                    3. Play the game
-                    4. Leave the Machine and pay out all of your winnings
-                    Select(1,2,3,4):\s""");
-            int choice = scan.nextInt();
+                    1. Add Money to the Machine\s""" + String.format(
+                    "%n2. Change bet amount (current bet is $%.2f and the default is $1.00)%n", betAmount) +
+                    """
+                            3. Play the game
+                            4. Leave the Machine and pay out all of your winnings
+                            Select Option:\s""";
+            //int choice = scan.nextInt();
+            int choice = JOptionPane.showOptionDialog(null,
+                    msg,
+                    "Enter a menu choice",
+                    JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.INFORMATION_MESSAGE,
+                    null,
+                    options,
+                    options[0]);
 
             //selects method relevant to selection
             switch (choice) {
-                case 1 -> {
-                    double[] changeMoney = addMoney(scan, playerBalance, machineBalance);
+                case 0 -> {
+                    double[] changeMoney = addMoney(playerBalance, machineBalance);
                     playerBalance = changeMoney[0];
                     machineBalance = changeMoney[1];
+                    printStats(playerBalance, machineBalance);
                 }
-                case 2 -> betAmount = changeBetAmount(scan, playerBalance, machineBalance);
-                case 3 -> {
+                case 1 -> betAmount = changeBetAmount(playerBalance, machineBalance);
+                case 2 -> {
                     double[] returnValues = play(playerBalance, machineBalance, betAmount, totalOfBets, rand);
                     playerBalance = returnValues[0];
                     machineBalance = returnValues[1];
                     betAmount = returnValues[2];
                     winnings += returnValues[3];
                     totalOfBets += returnValues[4];
+                    printStats(playerBalance, machineBalance);
                 }
-                case 4 -> {
+                case 3 -> {
                     cashOut(winnings, totalOfBets, machineBalance);
                     flag = false;
                 }
-                default -> System.out.print("\nInvalid Choice, ");
+                default -> JOptionPane.showMessageDialog(null, "Invalid Choice");
             }
         } while (flag);
     }
@@ -93,22 +100,26 @@ public class SlotMachine {
     /**
      * Allows user to add money to the machine.
      *
-     * @param scan           Takes a scanner for user input
      * @param playerBalance  takes the player's current balance
      * @param machineBalance takes the machine's current balance
      * @return a double[] array consisting of {playerBalance, machineBalance}
      */
-    public static double[] addMoney(Scanner scan, double playerBalance, double machineBalance) {
+    public static double[] addMoney(double playerBalance, double machineBalance) {
         double balance;
         do {
             //prompts user for how much money to add
-            System.out.printf("%nHow Much money would you like to add? " +
+            String msg = String.format("%nHow Much money would you like to add? " +
                     "(you have a balance of $%.2f and there is $%.2f in the machine): $", playerBalance, machineBalance);
-            balance = scan.nextDouble();
-
+            String input = JOptionPane.showInputDialog(msg, "0");
+            if (input == null) {
+                JOptionPane.showMessageDialog(null, "Invalid Input!");
+                continue;
+            } else {
+                balance = Double.parseDouble(input);
+            }
             //checks if user has that much money to bet
             if (balance > playerBalance || balance < 0) {
-                System.out.println("Invalid amount, please change how much you are depositing. " +
+                JOptionPane.showMessageDialog(null, "Invalid amount, please change how much you are depositing. " +
                         "(This cannot be over how much money you have or negative)");
                 printStats(playerBalance, machineBalance);
             } else {
@@ -116,8 +127,6 @@ public class SlotMachine {
                 playerBalance -= balance;
                 break;
             }
-            sleep(1);
-            System.out.println();
         } while (true);
         return new double[]{playerBalance, machineBalance};
     }
@@ -125,39 +134,43 @@ public class SlotMachine {
     /**
      * Allows user to change bet amount.
      *
-     * @param scan           Takes a scanner for user input
      * @param playerBalance  takes the player's current balance
      * @param machineBalance takes the machine's current balance
      * @return double of new betAmount value;
      */
-    public static double changeBetAmount(Scanner scan, double playerBalance, double machineBalance) {
+    public static double changeBetAmount(double playerBalance, double machineBalance) {
         //variable declaration
         double amount;
         double betAmount;
         //loops till bet is above $1.00 and in range of what player has
         do {
             //gets input from user
-            System.out.print("\nHow much money would you like to add to the machine? " +
-                    "(Must be $1.00 or above) $");
-            amount = scan.nextDouble();
+            String msg = "How much money would you like to add to the machine? (Must be $1.00 or above) $";
+            String input = JOptionPane.showInputDialog(msg, "1");
             //checks if user has that much money to bet
-            if (amount > playerBalance) {
-                System.out.println("\nInvalid bet, please change how much you are betting. " +
+            if (input == null) {
+                JOptionPane.showMessageDialog(null, "Invalid Input!");
+                continue;
+            } else {
+                amount = Double.parseDouble(input);
+            }
+            if (amount > machineBalance || amount < 1.00) {
+                JOptionPane.showMessageDialog(null, "Invalid bet, please change how much you are betting. " +
                         "(This cannot be over how much money you have)");
                 printStats(playerBalance, machineBalance);
             }
 
             //makes sure bet is not below $1.00
             if (amount < 1) {
-                System.out.println("\nSorry the default bet is 1.00, Please try again.");
+                JOptionPane.showMessageDialog(null, "Sorry the default bet is 1.00, Please try again.");
             } else {
+                //Tells user the bet
                 betAmount = amount;
+                String betPlaced = String.format("Your bet has been placed at $ %.2f%n%n%n", betAmount);
+                JOptionPane.showMessageDialog(null, betPlaced);
                 break;
             }
         } while (true);
-
-        //Tells user the bet
-        System.out.printf("Your bet has been placed at $ %.2f%n%n%n", betAmount);
         return betAmount;
     }
 
@@ -177,10 +190,10 @@ public class SlotMachine {
 
         //checks betAmount is valid
         if (machineBalance - betAmount < 0) {
-            System.out.println("\nNot enough money in the Machine! Try adding more money to the machine");
+            JOptionPane.showMessageDialog(null, "Not enough money in the Machine! Try adding more money to the machine");
             return new double[]{playerBalance, machineBalance, betAmount, winnings, totalOfBets};
         } else {
-            System.out.println("\nThe Game is about to start!");
+            JOptionPane.showMessageDialog(null, "The Game is about to start!");
             sleep(1);
         }
         //takes bet
@@ -201,11 +214,11 @@ public class SlotMachine {
                 reels[i][j] = WORDS[rand.nextInt(WORDS.length)];
             }
         }
-        System.out.println("\n");
+        StringBuilder reelPrint = new StringBuilder();
         for (String[] reel : reels) {
-            System.out.printf("%s\t\t%s\t\t%s%n", reel[0], reel[1], reel[2]);
-            sleep(1);
+            reelPrint.append(String.format("%s        %s        %s%n", reel[0], reel[1], reel[2]));
         }
+        JOptionPane.showMessageDialog(null, reelPrint.toString());
 
         //checks winning conditions
         //if three or two across
@@ -277,8 +290,8 @@ public class SlotMachine {
         //adds winnings to total balance
         machineBalance += winnings;
 
-        System.out.printf("%nYour total winnings are $%.2f%n", (winnings - betAmount));
-        sleep(1);
+        String tellWinnings = String.format("%nYour total winnings are $%.2f%n", (winnings - betAmount));
+        JOptionPane.showMessageDialog(null, tellWinnings);
         return new double[]{playerBalance, machineBalance, betAmount, winnings, totalOfBets};
     }
 
@@ -290,9 +303,11 @@ public class SlotMachine {
      * @param machineBalance takes the machine's current balance
      */
     public static void cashOut(double winnings, double totalOfBets, double machineBalance) {
-        System.out.println("Thanks for playing the Slot Machine!!");
+        JOptionPane.showMessageDialog(null, "Thanks for playing the Slot Machine!!");
         if (winnings - totalOfBets > 0) {
-            System.out.printf("Congratulations, you have won $%.2f, a total of $%.2f will be returned to you!%n", (winnings - totalOfBets), machineBalance);
+            String printWinnings = String.format("Congratulations, you have won $%.2f, a total of $%.2f will be returned to you!%n",
+                    (winnings - totalOfBets), machineBalance);
+            JOptionPane.showMessageDialog(null, printWinnings);
         } else {
             double returnValue;
             if ((machineBalance + winnings) > 0) {
@@ -301,7 +316,9 @@ public class SlotMachine {
                 returnValue = 0;
             }
 
-            System.out.printf("Sorry, you have lost -$%.2f, a total of $%.2f will be returned to you!%n", Math.abs(winnings - totalOfBets), returnValue);
+            String printLosses = String.format("Sorry, you have lost -$%.2f, a total of $%.2f will be returned to you!%n",
+                    Math.abs(winnings - totalOfBets), returnValue);
+            JOptionPane.showMessageDialog(null, printLosses);
         }
     }
 
@@ -312,8 +329,9 @@ public class SlotMachine {
      * @param machineBalance takes the machine's current balance
      */
     public static void printStats(double playerBalance, double machineBalance) {
-        System.out.printf("Your balance is now $%.2f and there is $%.2f in the machine)%n", playerBalance, machineBalance);
-        sleep(1);
+        String stats = String.format("Your balance is now $%.2f and there is $%.2f in the machine)%n",
+                playerBalance, machineBalance);
+        JOptionPane.showMessageDialog(null, stats);
     }
 
     /**
@@ -323,7 +341,8 @@ public class SlotMachine {
      * @param direction             Which direction they won (across, down, diagonally)
      */
     public static void declareWinnings(String rowColumnOrDiagonally, String direction) {
-        System.out.printf("%nYou won on %s %s!", rowColumnOrDiagonally, direction);
+        String declareWin = String.format("%nYou won on %s %s!", rowColumnOrDiagonally, direction);
+        JOptionPane.showMessageDialog(null, declareWin);
     }
 
     /**
