@@ -46,7 +46,7 @@ public class SlotMachine {
         double betAmount = 1;
         double winnings = 0;
         double totalOfBets = 0;
-        String[] options = {"Please select an option....","Add Money", "Change Bet Amount", "Play", "Cash Out and Leave"};
+        String[] options = {"Please select an option....", "Add Money", "Change Bet Amount", "Play", "Cash Out and Leave"};
         printStats(playerBalance, machineBalance);
         do {
             //tells user balances
