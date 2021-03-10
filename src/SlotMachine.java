@@ -224,7 +224,7 @@ public class SlotMachine {
         }
         StringBuilder reelPrint = new StringBuilder();
         for (String[] reel : reels) {
-            reelPrint.append(String.format("%s        %s        %s%n", reel[0], reel[1], reel[2]));
+            reelPrint.append(String.format("%15s%15s%15s%n", reel[0], reel[1], reel[2]));
         }
         JOptionPane.showMessageDialog(null, reelPrint.toString());
         System.out.println(reelPrint.toString());
@@ -297,9 +297,13 @@ public class SlotMachine {
         }
         //adds winnings to total balance
         machineBalance += winnings;
-
-        String tellWinnings = String.format("%nYour total winnings are $%.2f%n", (winnings - betAmount));
-        JOptionPane.showMessageDialog(null, tellWinnings);
+        StringBuilder tellWinnings = new StringBuilder("");
+        if (winnings - betAmount >= 0) {
+            tellWinnings.append(String.format("%nYour total winnings are $%.2f%n", (winnings - betAmount)));
+        } else{
+            tellWinnings.append(String.format("%nYour total winnings are -$%.2f%n", (Math.abs(winnings - betAmount))));
+        }
+        JOptionPane.showMessageDialog(null, tellWinnings.toString());
         return new double[]{playerBalance, machineBalance, betAmount, winnings, totalOfBets};
     }
 
