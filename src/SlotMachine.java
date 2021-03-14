@@ -7,15 +7,17 @@
 
 //import used libraries
 
-import javax.swing.*;
 import java.util.Random;
+import javax.swing.JOptionPane;
 
 /**
  * Main SlotMachine class.
  */
 public class SlotMachine {
     /**
-     * Main method
+     * The main method.
+     *
+     * @param args any arguments
      */
     public static void main(String[] args) {
         welcome();
@@ -26,7 +28,7 @@ public class SlotMachine {
      * Prints Welcome message.
      */
     public static void welcome() {
-        String welcome = "#".repeat(32) +
+        final String welcome = "#".repeat(32) +
                 "\n##    Welcome to the Casino!    ##" +
                 "\n\n##  Default Starting bet is $1  ##" +
                 "\n\n##   Player starts with $100    ##\n\n" +
@@ -146,7 +148,7 @@ public class SlotMachine {
      * @param machineBalance takes the machine's current balance
      * @return double of new betAmount value;
      */
-    public static double changeBetAmount(double playerBalance, double machineBalance) {
+    public static double changeBetAmount(final double playerBalance, final double machineBalance) {
         //variable declaration
         double amount;
         double betAmount;
@@ -212,7 +214,7 @@ public class SlotMachine {
         totalOfBets += betAmount;
 
         //initializes variables
-        String[] WORDS = {"Computer", "Science", "Java", "Hello", "World", "Professor", "Helsing"};
+        final String[] WORDS = {"Computer", "Science", "Java", "Hello", "World", "Professor", "Helsing"};
 
         //initializes random object
         String[][] reels = new String[3][3];
@@ -309,12 +311,12 @@ public class SlotMachine {
     }
 
     /**
-     * Displays ending message and Cash Out
+     * Displays ending message and Cash Out.
      *
      * @param winnings       takes the amount of winnings for the player
      * @param machineBalance takes the machine's current balance
      */
-    public static void cashOut(double winnings, double machineBalance) {
+    public static void cashOut(final double winnings, final double machineBalance) {
         JOptionPane.showMessageDialog(null, "Thanks for playing the Slot Machine!!");
         if (winnings >= 0) {
             String printWinnings = String.format("Congratulations, you have won $%.2f, a total of $%.2f will be returned to you!%n",
@@ -335,24 +337,24 @@ public class SlotMachine {
     }
 
     /**
-     * Tells user their current balances
+     * Tells user their current balances.
      *
      * @param playerBalance  takes the player's current balance
      * @param machineBalance takes the machine's current balance
      */
-    public static void printStats(double playerBalance, double machineBalance) {
+    public static void printStats(final double playerBalance, final double machineBalance) {
         String stats = String.format("Your balance is now $%.2f and there is $%.2f in the machine)%n",
                 playerBalance, machineBalance);
         JOptionPane.showMessageDialog(null, stats);
     }
 
     /**
-     * Tells user how much they have won for each condition met
+     * Tells user how much they have won for each condition met.
      *
      * @param rowColumnOrDiagonally How they won(row, column, from where to where diagonally)
      * @param direction             Which direction they won (across, down, diagonally)
      */
-    public static void declareWinnings(String rowColumnOrDiagonally, String direction) {
+    public static void declareWinnings(final String rowColumnOrDiagonally, final String direction) {
         String declareWin = String.format("%nYou won on %s %s!", rowColumnOrDiagonally, direction);
         JOptionPane.showMessageDialog(null, declareWin);
     }
