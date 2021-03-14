@@ -311,13 +311,14 @@ public class SlotMachine {
 
         //adds winnings to total balance
         machineBalance += winnings;
-        StringBuilder tellWinnings = new StringBuilder();
+        //tells user winnings
         if (winnings - betAmount >= 0) {
-            tellWinnings.append(String.format("%nYour total winnings are $%.2f%n", (winnings - betAmount)));
+            JOptionPane.showMessageDialog(null,
+                    String.format("%nYour total winnings are $%.2f%n", (winnings - betAmount)));
         } else {
-            tellWinnings.append(String.format("%nYour total winnings are -$%.2f%n", (Math.abs(winnings - betAmount))));
+            JOptionPane.showMessageDialog(null,
+                    String.format("%nYour total winnings are -$%.2f%n", (Math.abs(winnings - betAmount))));
         }
-        JOptionPane.showMessageDialog(null, tellWinnings.toString());
         return new double[]{playerBalance, machineBalance, winnings - betAmount, totalOfBets};
     }
 
