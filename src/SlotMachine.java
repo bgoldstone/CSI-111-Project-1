@@ -229,8 +229,10 @@ public class SlotMachine {
         for (String[] reel : reels) {
             reelPrint.append(String.format("%15s%15s%15s%n", reel[0], reel[1], reel[2]));
         }
+        //Prints Reels
         JOptionPane.showMessageDialog(null, reelPrint.toString());
         System.out.println(reelPrint.toString());
+
         //checks winning conditions
         //if three or two across
         if (reels[0][0].equals(reels[0][1]) && reels[0][1].equals(reels[0][2])) {
