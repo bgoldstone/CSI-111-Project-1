@@ -235,6 +235,7 @@ public class SlotMachine {
 
         //checks winning conditions
         //if three or two across
+        //first row
         if (reels[0][0].equals(reels[0][1]) && reels[0][1].equals(reels[0][2])) {
             winnings += betAmount * 3;
             declareWinnings("top row", "across");
@@ -243,6 +244,7 @@ public class SlotMachine {
             declareWinnings("top row", "across");
         }
 
+        //second row
         if (reels[1][0].equals(reels[1][1]) && reels[1][1].equals(reels[1][2])) {
             winnings += betAmount * 3;
             declareWinnings("middle row", "across");
@@ -251,6 +253,7 @@ public class SlotMachine {
             declareWinnings("middle row", "across");
         }
 
+        //third row
         if (reels[2][0].equals(reels[2][1]) && reels[2][1].equals(reels[2][2])) {
             winnings += betAmount * 3;
             declareWinnings("bottom row", "across");
@@ -260,6 +263,7 @@ public class SlotMachine {
         }
 
         //if three or two down
+        //first column
         if (reels[0][0].equals(reels[1][0]) && reels[1][0].equals(reels[2][0])) {
             winnings += betAmount * 3;
             declareWinnings("left column", "down");
@@ -268,6 +272,7 @@ public class SlotMachine {
             declareWinnings("left column", "down");
         }
 
+        //second column
         if (reels[0][1].equals(reels[1][1]) && reels[1][1].equals(reels[2][1])) {
             winnings += betAmount * 3;
             declareWinnings("middle column", "down");
@@ -276,6 +281,7 @@ public class SlotMachine {
             declareWinnings("middle column", "down");
         }
 
+        //third column
         if (reels[0][2].equals(reels[1][2]) && reels[1][2].equals(reels[2][2])) {
             winnings += betAmount * 3;
             declareWinnings("right column", "down");
@@ -285,6 +291,7 @@ public class SlotMachine {
         }
 
         //if two or three diagonal
+        //top left to bottom right
         if (reels[0][0].equals(reels[1][1]) && reels[1][1].equals(reels[2][2])) {
             winnings += betAmount * 3;
             declareWinnings("top left to bottom right", "diagonal");
@@ -293,6 +300,7 @@ public class SlotMachine {
             declareWinnings("top left to bottom right", "diagonal");
         }
 
+        //bottom left to top right
         if (reels[0][2].equals(reels[1][1]) && reels[1][1].equals(reels[2][0])) {
             winnings += betAmount * 3;
             declareWinnings("bottom left to top right", "diagonal");
@@ -300,6 +308,7 @@ public class SlotMachine {
             winnings += betAmount * 2;
             declareWinnings("bottom left to top right", "diagonal");
         }
+
         //adds winnings to total balance
         machineBalance += winnings;
         StringBuilder tellWinnings = new StringBuilder();
