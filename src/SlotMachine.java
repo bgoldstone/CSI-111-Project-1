@@ -21,25 +21,7 @@ public class SlotMachine {
      */
     public static void main(String[] args) {
         welcome();
-        menu();
-    }
 
-    /**
-     * Prints Welcome message.
-     */
-    public static void welcome() {
-        final String welcome = "#".repeat(32) +
-                "\n##    Welcome to the Casino!    ##" +
-                "\n\n##  Default Starting bet is $1  ##" +
-                "\n\n##   Player starts with $100    ##\n\n" +
-                "#".repeat(32);
-        JOptionPane.showMessageDialog(null, welcome, "", JOptionPane.INFORMATION_MESSAGE);
-    }
-
-    /**
-     * Prompts user for choice of what action to do.
-     */
-    public static void menu() {
         //initializes local variables/objects
         boolean flag = true;
         Random rand = new Random();
@@ -48,7 +30,11 @@ public class SlotMachine {
         double betAmount = 1;
         double winnings = 0;
         String[] options = {"Please select an option....", "Add Money", "Change Bet Amount", "Play", "Cash Out and Leave"};
+
+        //prints current player's stats
         printStats(playerBalance, machineBalance);
+
+        //Menu Loop
         do {
             //tells user balances
 
@@ -68,6 +54,8 @@ public class SlotMachine {
                     options,
                     options[0]);
             int choice = 0;
+
+            //makes sure user selected an option
             if (input == null) {
                 JOptionPane.showMessageDialog(null, "Invalid Selection!!", "Invalid Selection!", JOptionPane.ERROR_MESSAGE);
                 continue;
@@ -100,11 +88,23 @@ public class SlotMachine {
                     cashOut(winnings, machineBalance);
                     flag = false;
                 }
+                //if no option selected
                 default -> JOptionPane.showMessageDialog(null, "Please select one of the four actions.", "", JOptionPane.WARNING_MESSAGE);
             }
         } while (flag);
     }
 
+    /**
+     * Prints Welcome message.
+     */
+    public static void welcome() {
+        final String welcome = "#".repeat(32) +
+                "\n##    Welcome to the Casino!    ##" +
+                "\n\n##  Default Starting bet is $1  ##" +
+                "\n\n##   Player starts with $100    ##\n\n" +
+                "#".repeat(32);
+        JOptionPane.showMessageDialog(null, welcome, "", JOptionPane.INFORMATION_MESSAGE);
+    }
     /**
      * Allows user to add money to the machine.
      *
