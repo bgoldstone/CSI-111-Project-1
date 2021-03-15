@@ -20,6 +20,7 @@ public class SlotMachine {
      * @param args any arguments
      */
     public static void main(String[] args) {
+        //prints welcome message
         welcome();
 
         //initializes local variables/objects
