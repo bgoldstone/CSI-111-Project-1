@@ -40,14 +40,12 @@ public class SlotMachine {
             //tells user balances
 
             //prompts user for menu option
-            String msg = """
-                    Please select an option:
-                    1. Add Money to the Machine\s""" + String.format(
-                    "%n2. Change bet amount (current bet is $%.2f and the default is $1.00)%n", betAmount) +
-                    """
-                            3. Play the game
-                            4. Leave the Machine and pay out all of your winnings
-                            Select Option:\s""";
+            String msg = "Please select an option:" +
+                    "\n1. Add Money to the Machine\s" + String.format(
+                    "%n2. Change bet amount (current bet is $%.2f and the default is $1.00)", betAmount) +
+                    "\n3. Play the game" +
+                    "\n4. Leave the Machine and pay out all of your winnings" +
+                            "Select Option:\s";
             String input = (String) JOptionPane.showInputDialog(null, msg,
                     "Enter a menu choice",
                     JOptionPane.QUESTION_MESSAGE,
