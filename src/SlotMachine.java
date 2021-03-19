@@ -354,7 +354,7 @@ public class SlotMachine {
      * @param machineBalance takes the machine's current balance
      */
     public static void printStats(final double playerBalance, final double machineBalance) {
-        String stats = String.format("Your balance is now $%.2f and there is $%.2f in the machine)%n",
+        String stats = String.format("Your balance in pocket is $%.2f and there is now $%.2f in the machine)%n",
                 playerBalance, machineBalance);
         JOptionPane.showMessageDialog(null, stats);
     }
