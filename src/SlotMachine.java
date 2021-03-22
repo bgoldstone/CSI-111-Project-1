@@ -214,7 +214,7 @@ public class SlotMachine {
 
         //initializes variables
         /*
-        More efficient to have in main method because it only assigns the array once.
+        More efficient to have in main method because it only assigns the array to memory once.
          */
         final String[] WORDS = {"Computer", "Science", "Java", "Hello", "World", "Professor", "Helsing"};
 
