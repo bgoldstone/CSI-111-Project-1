@@ -213,6 +213,9 @@ public class SlotMachine {
         totalOfBets += betAmount;
 
         //initializes variables
+        /*
+        More efficient to have in main method because it only assigns the array once.
+         */
         final String[] WORDS = {"Computer", "Science", "Java", "Hello", "World", "Professor", "Helsing"};
 
         //initializes random object
